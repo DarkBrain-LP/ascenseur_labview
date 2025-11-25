@@ -1,0 +1,101 @@
+' ' @startuml
+' ' title Logique Ascenseur - Machine à États (LabVIEW)
+' ' skinparam state {
+' '   BackgroundColor<<Idle>> LightBlue
+' '   BackgroundColor<<Moving>> LightGreen
+' '   BackgroundColor<<Action>> LightCoral
+' ' }
+
+' ' [*] --> IDLE
+
+' ' state "IDLE (Attente)" as IDLE <<Idle>> : Moteur OFF
+' ' state "MONTEE (Motor Up)" as UP <<Moving>> : Moteur Sens 1
+' ' state "DESCENTE (Motor Down)" as DOWN <<Moving>> : Moteur Sens 2
+' ' state "SEQUENCE_ARRET" as STOP <<Action>> : 1. Arrêt Moteur\n2. Ouverture Porte\n3. Tempo\n4. Fermeture Porte
+
+' ' state c_idle <<choice>>
+' ' state c_up <<choice>>
+' ' state c_down <<choice>>
+' ' state c_next <<choice>>
+
+' ' note right of IDLE
+' '   Vérifie les tableaux
+' '   d'appels (Booléens)
+' ' end note
+
+' ' IDLE --> c_idle : Appel détecté ?
+' ' c_idle --> UP : Appel > Etage Actuel
+' ' c_idle --> DOWN : Appel < Etage Actuel
+' ' c_idle --> STOP : Appel == Etage Actuel\n(Cas rare mais possible)
+' ' c_idle --> IDLE : Aucun appel
+
+' ' UP --> c_up : Arrivée au capteur d'étage
+' ' c_up --> UP : Pas d'arrêt ici
+' ' c_up --> STOP : DOIT S'ARRETER ?\n(Appel Cabine OU\nAppel Palier MONTÉE OU\nPlus d'appels plus haut)
+
+' ' DOWN --> c_down : Arrivée au capteur d'étage
+' ' c_down --> DOWN : Pas d'arrêt ici
+' ' c_down --> STOP : DOIT S'ARRETER ?\n(Appel Cabine OU\nAppel Palier DESCENTE OU\nPlus d'appels plus bas)
+
+' ' STOP --> c_next : Fin fermeture porte
+' ' c_next --> UP : Reste des appels\nplus HAUT ?
+' ' c_next --> DOWN : Reste des appels\nplus BAS ?
+' ' c_next --> IDLE : Plus aucun appel
+
+' ' note right of c_up
+' '   Logique d'arrêt en Montée :
+' '   1. Y a-t-il un appel Cabine pour cet étage ?
+' '   2. Y a-t-il un appel Palier "MONTER" ici ?
+' '   3. Est-ce l'appel le plus haut (demi-tour) ?
+' ' end note
+
+' ' @enduml
+' @startuml
+' title Logique ASC89 MyRIO - Gestion Portes Indépendantes
+' skinparam state {
+'   BackgroundColor<<MoteurCabine>> LightGreen
+'   BackgroundColor<<MoteurPorte>> LightCoral
+'   BackgroundColor<<Calcul>> LightBlue
+' }
+
+' [*] --> INIT
+
+' state "IDLE (Attente)" as IDLE <<Calcul>>
+' state "MONTEE" as UP <<MoteurCabine>>
+' state "DESCENTE" as DOWN <<MoteurCabine>>
+
+' state "SÉQUENCE_PORTE" as DOORS {
+'     state "OUVERTURE_PORTE_X" as OPENING <<MoteurPorte>> : Active Driver Porte[Etage_Actuel]\nSens : Ouvrir
+'     state "ATTENTE_TEMPO" as WAIT : Timer 3s
+'     state "FERMETURE_PORTE_X" as CLOSING <<MoteurPorte>> : Active Driver Porte[Etage_Actuel]\nSens : Fermer
+    
+'     [*] --> OPENING
+'     OPENING --> WAIT : Capteur "Porte Ouverte"[Etage_Actuel] == VRAI
+'     WAIT --> CLOSING : Tempo écoulée
+'     CLOSING --> [*] : Capteur "Porte Fermée"[Etage_Actuel] == VRAI
+' }
+
+' INIT --> IDLE : Initialisation faite
+
+' IDLE --> UP : Appel > Etage_Actuel
+' IDLE --> DOWN : Appel < Etage_Actuel
+' IDLE --> DOORS : Appel == Etage_Actuel
+
+' UP --> UP : Capteur Etage change\n(Mise à jour Etage_Actuel)
+' UP --> DOORS : Condition d'arrêt remplie\n(Stop Cabine d'abord)
+
+' DOWN --> DOWN : Capteur Etage change\n(Mise à jour Etage_Actuel)
+' DOWN --> DOORS : Condition d'arrêt remplie\n(Stop Cabine d'abord)
+
+' DOORS --> IDLE : Fin de fermeture\n& Plus d'appels
+' DOORS --> UP : Fin de fermeture\n& Reste appels Haut
+' DOORS --> DOWN : Fin de fermeture\n& Reste appels Bas
+
+' note right of OPENING
+'   C'est ici que LabVIEW doit sélectionner
+'   le bon moteur parmi les 4 (0,1,2,3)
+'   en fonction de la variable "Etage_Actuel"
+' end note
+
+' @enduml
+    
