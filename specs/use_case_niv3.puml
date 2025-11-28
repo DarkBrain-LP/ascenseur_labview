@@ -1,0 +1,39 @@
+@startuml
+' Définition du style pour une meilleure lisibilité
+skinparam actorStyle awesome
+skinparam usecase {
+    BackgroundColor #LightGreen
+    BorderColor #DarkGreen
+    ArrowColor #Navy
+}
+skinparam package {
+    BackgroundColor #lightblue
+    BorderColor #blue
+}
+
+left to right direction
+
+' Définition des acteurs
+actor "Utilisateur" as PC
+actor "MyRIO" as MyRIO
+
+' Définition du système d'ascenseur (Cas d'utilisation Niv 3)
+rectangle "Système de Gestion d'Ascenseur - Niv 3" {
+    usecase "Poussoir appel descente niv 3" as UC6
+    usecase "Voyant appel descente niv 3" as UC6_1
+    usecase "Voyant présence cabine niv 3" as UCCabAtNiv3
+    usecase "Moteur Ouverture porte niv 3" as UC6_2
+    usecase "Moteur Fermeture porte niv 3" as UC6_3
+}
+
+' Relations entre les acteurs et les cas d'utilisation
+PC --> UC6 : Appuie sur le poussoir (Descente)
+MyRIO --> UC6_1 : Allume le voyant (Descente)
+
+MyRIO --> UCCabAtNiv3 : Recois la position cabine
+MyRIO --> UC6_2 : Active le moteur ouverture porte
+MyRIO --> UC6_3 : Active le moteur fermeture porte
+
+' Relations d'inclusion
+UC6_1 ..> UC6 : <<include>>
+@enduml

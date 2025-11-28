@@ -1,0 +1,40 @@
+@startuml
+' Définition du style pour une meilleure lisibilité
+skinparam actorStyle awesome
+skinparam usecase {
+    BackgroundColor #LightGreen
+    BorderColor #DarkGreen
+    ArrowColor #Navy
+}
+skinparam package {
+    BackgroundColor #lightblue
+    BorderColor #blue
+}
+
+left to right direction
+
+' Définition des acteurs
+actor "Utilisateur" as PC
+actor "MyRIO" as MyRIO
+
+' Définition du système d'ascenseur (Cas d'utilisation RDC)
+rectangle "Système de Gestion d'Ascenseur - RDC" {
+  usecase "Poussoir appel montée RDC" as UC1
+  usecase "Voyant appel montée RDC" as UC1_1
+  usecase "Commande moteur cabine" as UCCabMotor
+  usecase "Voyant présence cabine RDC" as UCCabAtRDC
+  usecase "Moteur Ouverture porte RDC" as UC1_2
+  usecase "Moteur Fermeture porte RDC" as UC1_3
+}
+
+' Relations entre les acteurs et les cas d'utilisation
+PC --> UC1 : Appuie sur le poussoir
+MyRIO --> UC1_1 : Allume le voyant
+MyRIO --> UCCabMotor : Active le moteur
+MyRIO --> UCCabAtRDC : Recois la position cabine
+MyRIO --> UC1_2 : Active le moteur ouverture porte
+MyRIO --> UC1_3 : Active le moteur fermeture porte
+
+' Relations d'inclusion
+UC1_1 ..> UC1 : <<include>> ' L'appel déclenche l'allumage du voyant
+@enduml
