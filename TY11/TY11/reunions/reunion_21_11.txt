@@ -1,0 +1,5 @@
+hoter l'état en mouvement et aucun appel
+Numeoro des slide
+TODO : 
+arret d'urgence sur une entrée DIO aussi par exemple 
+sous-vi de gestion d'un moteur
