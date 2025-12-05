@@ -1,6 +1,6 @@
 [NI-myRIO-1900-03067006]
-NI-myRIO-1900-03067006 = "172.22.11.2"
+NI-myRIO-1900-03067006 = "172.22.11.26"
 
 [Poste de travail]
-Poste de travail = "172.22.11.1"
+Poste de travail = "172.22.11.17"
 
