@@ -111,6 +111,7 @@ AddOutputFilter chunkFilter
 		<Item Name="Handlers" Type="Folder">
 			<Item Name="Arret_Urgence_Handler.vi" Type="VI" URL="../Handler/Arret_Urgence_Handler.vi"/>
 			<Item Name="Attente_Tempo_Handler.vi" Type="VI" URL="../Handler/Attente_Tempo_Handler.vi"/>
+			<Item Name="Calculateur_Destination.vi" Type="VI" URL="../Handler/Calculateur_Destination.vi"/>
 			<Item Name="Deplacement_Handler.vi" Type="VI" URL="../Handler/Deplacement_Handler.vi"/>
 			<Item Name="Fermeture_Porte_Handler.vi" Type="VI" URL="../Handler/Fermeture_Porte_Handler.vi"/>
 			<Item Name="Gestion_Voyant.vi" Type="VI" URL="../Handler/Gestion_Voyant.vi"/>
