@@ -40,7 +40,7 @@ Elle agit comme une **HAL (Hardware Abstraction Layer)**. Elle s'exécute à 40 
 * **Sécurité :** Génère les signaux PWM et gère l'inversion de polarité via le driver L298N hardware.
 * **Découplage :** Fonctionne indépendamment du processeur RT (si le processeur plante, le FPGA continue d'assurer les états électriques).
 
-![Code FPGA](images/image_dfe472.png)
+![Code FPGA](images/block_diagram_Main_FPGA.png)
 *Figure : Boucles parallèles du FPGA (Lecture Capteurs à droite, Commande Moteurs à gauche).*
 
 ### 2. Couche Real-Time (Haut Niveau)
@@ -51,7 +51,7 @@ Hébergée sur le processeur ARM Cortex-A9, elle exécute la logique décisionne
 2.  **Logic :** Algorithme SCAN et transitions d'états (Repos, Déplacement, Ouverture...).
 3.  **Write Outputs :** Envoi des commandes de mouvement vers le FPGA.
 
-![Machine à États](images/image_192743.png)
+![Machine à États](images/diagramme_etat.png)
 *Figure : Cœur de la machine à états avec le registre à décalage (Cluster).*
 
 ---
@@ -111,3 +111,4 @@ Toutes les variables d'état (Position, Appels, Direction) sont encapsulées dan
 ---
 
 *Projet réalisé à l'UTBM - Département Mécatronique*
+
